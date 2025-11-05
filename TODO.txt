@@ -1,0 +1,16 @@
+Core Functionality:
+- UI Events (needs work)
+- UI dynamic sizing (needs reworking) a full rewrite of the structure and flow is needed
+- Split graphics functionality into it's own manager called Style just like done with layouts for styling
+- Refactor for readability and maintainability
+- Do a full test of each component and their interactions before moving onto developing Objects
+
+Objects:
+- Label
+- Button
+- Input Box (any input)
+- Integer Box (integer only input)
+- Float Box (integer or float only input)
+- Text Box (multi-line Label)
+- Combo Box
+- Draggable
