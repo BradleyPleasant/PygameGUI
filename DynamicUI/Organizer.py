@@ -1,5 +1,4 @@
 from pygame import FRect
-
 from .Element import Element
 
 
@@ -24,7 +23,6 @@ class VerticalOrganizer(Organizer):
         # If no children, ask renderer for intrinsic size
         if not element.children and element.renderer:
             width, height = element.renderer.measure_content(element)
-            print(width, height)
             min_width, min_height = width, height
 
         # Add element padding

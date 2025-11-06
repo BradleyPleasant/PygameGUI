@@ -67,4 +67,21 @@ class Element:  # Entity in ECS - decided to use UI term Element as this is a UI
         return self.rect.x, self.rect.y
 
     def global_rect(self):
-        return FRect(self.global_position(), self.rect.topleft)
+        return FRect(self.global_position(), self.rect.size)
+
+    def get_lowest_element_at_pos(self, pos: tuple[float, float]) -> "Element | None":
+        if not self.global_rect().collidepoint(pos):
+            return None
+        for child in reversed(self.children):
+            result = child.get_lowest_element_at_pos(pos)
+            if result:
+                return result
+        return self
+
+
+    def get_lowest_selectable_parent(self) -> "Element | None":
+        if self.input_handler:
+            return self
+        if self.parent:
+            return self.parent.get_lowest_selectable_parent()
+        return None
