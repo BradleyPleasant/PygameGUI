@@ -1,3 +1,4 @@
+TODO:
 Core Functionality:
 - UI Events (needs work)
 - UI dynamic sizing (needs reworking) a full rewrite of the structure and flow is needed

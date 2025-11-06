@@ -1,4 +1,5 @@
-from GUI import Application, UIObject, VerticalLayout, HorizontalLayout, pygame, Layout, Label
+import pygame
+from GUI import Application, UIObject, VerticalLayout, HorizontalLayout, Layout, Label
 from GUI import DraggableBar
 
 
