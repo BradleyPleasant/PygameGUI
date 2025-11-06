@@ -1,18 +1,20 @@
 TODO:
 Core Functionality:
-- UI Events (needs work)
-- UI dynamic sizing (needs reworking) a full rewrite of the structure and flow is needed
-  Done: made a new Dynamic UI system that is more flexible and easier to use
-- Split graphics functionality into it's own manager called Style just like done with layouts for styling
-- Refactor for readability and maintainability
-- Do a full test of each component and their interactions before moving onto developing Objects
+[Done] - Rewrite core functionality to use ECS architecture.
+[Done] - Implement a basic rendering system for UI elements.
+[Done] - Create a basic event handling system for UI interactions.
+[ ] - Optimize rendering pipeline for better performance.
+[ ] - Add support for themes and styles to customize UI appearance.
+[ ] - Implement a third pass for Organizers so that children will grow to fill remaining space.
+[ ] - Add custom Events for common interactions (e.g., onHover, onFocus, onBlur).
+[ ] - Dabble with adding a input system for keyboard and mouse interactions.
 
 Objects:
-- Label
-- Button
-- Input Box (any input)
-- Integer Box (integer only input)
-- Float Box (integer or float only input)
-- Text Box (multi-line Label)
-- Combo Box
-- Draggable
+[Needs work] - Label
+[Needs work] - Button
+[ ] - Input Box (any input)
+[ ] - Integer Box (integer only input)
+[ ] - Float Box (integer or float only input)
+[ ] - Text Box (multi-line Label)
+[ ] - Combo Box
+[ ] - Draggable

@@ -16,7 +16,9 @@ class Application:
         self.elements = list()
         self.running = True
         self.selected = None
+        self.dragging = None
         self.clock = pygame.time.Clock()
+        Element.app = self
 
     def add_element(self, element: Element):
         self.elements.append(element)
@@ -33,6 +35,7 @@ class Application:
 
     def run(self) -> None:
         while self.running:
+            mouse_up_handled = set()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
@@ -46,6 +49,17 @@ class Application:
                 if event.type == pygame.MOUSEBUTTONUP:
                     if lowest := self.get_lowest_selectable_child(event.pos):
                         lowest.input_handler.handle_event(event, lowest)
+                        mouse_up_handled.add(lowest)
+
+                    if self.selected not in mouse_up_handled:
+                        if self.selected:
+                            self.selected.input_handler.handle_event(event, self.selected)
+                            mouse_up_handled.add(self.selected)
+
+                if event.type == pygame.MOUSEMOTION:
+                    if self.dragging:
+                        self.dragging.input_handler.handle_event(event, self.dragging)
+
 
 
                 if event.type == pygame.KEYDOWN:

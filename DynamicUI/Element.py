@@ -4,8 +4,9 @@ from pygame import FRect
 class Element:  # Entity in ECS - decided to use UI term Element as this is a UI library
     UID_COUNTER = 0
     ELEMENTS = {}
+    app = None
 
-    def __init__(self, manager, organizer, renderer, input_handler,
+    def __init__(self, organizer, renderer, input_handler,
                  parent:"Element | None" = None, rect = None) -> None:
         """
         The Base Class for all UI Elements.
@@ -18,14 +19,13 @@ class Element:  # Entity in ECS - decided to use UI term Element as this is a UI
 
         - sets root element reference
 
-        :param manager: Manager
+        :param app: Manager
         :param parent: UIElement | None
         :param layout_handler: LayoutHandler
         :param graphics_handler: GraphicsHandler
         :param input_handler: InputHandler
         """
         self.rect = FRect(rect) if rect else FRect(0, 0, 0, 0)  # must be between the minimum and maximum bounds
-        self.manager = manager
         self.uid = Element.UID_COUNTER
         Element.UID_COUNTER += 1  # increment the counter for next UID
         self.children = []

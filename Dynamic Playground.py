@@ -1,4 +1,5 @@
 from DynamicUI import *
+from DynamicUI.Objects.Draggable import DraggableInputHandler
 from DynamicUI.Objects.Label import LabelRenderer, LabelInputHandler
 from DynamicUI.Objects.Button import ButtonInputHandler
 
@@ -7,23 +8,20 @@ app = Application()
 
 
 root = Element(
-    manager=None,
     organizer=VerticalOrganizer(element_padding=10, children_padding=5),
     renderer=Renderer(background_color=(70, 70, 200)),
-    input_handler=None,
+    input_handler=DraggableInputHandler(),
     rect=(20, 20, 0, 0)
 )
 
 child1 = Element(
-    manager=None,
     organizer=VerticalOrganizer(element_padding=5, children_padding=5),
     renderer=LabelRenderer(text = "This is a child element inside the root element"),
-    input_handler=LabelInputHandler(),
+    input_handler=None,
     parent=root,
     rect=(0, 0, 0, 0)
 )
 child2 = Element(
-    manager=None,
     organizer=VerticalOrganizer(element_padding=5, children_padding=5),
     renderer=LabelRenderer(text = "It is just a dataclass with an organizer, renderer, and event_handler", background_color=(20, 200, 20)),
     input_handler=ButtonInputHandler(),
@@ -31,21 +29,18 @@ child2 = Element(
     rect=(0, 0, 0, 0)
 )
 child3 = Element(
-    manager=None,
     organizer=HorizontalOrganizer(element_padding=5, children_padding=5),
     renderer=Renderer(background_color=(20, 20, 200)),
     input_handler=None,
     parent=root,
     rect=(0, 0, 0, 0)
 ); child4 = Element(
-    manager=None,
     organizer=VerticalOrganizer(element_padding=5, children_padding=5),
     renderer=LabelRenderer(text="It let's you", anchor = "topright"),
     input_handler=LabelInputHandler(),
     parent=child3,
     rect=(0, 0, 0, 0)
 ); child5 = Element(
-    manager=None,
     organizer=VerticalOrganizer(element_padding=5, children_padding=5),
     renderer=LabelRenderer(text="Plug and Play!", anchor="midbottom"),
     input_handler=LabelInputHandler(),
