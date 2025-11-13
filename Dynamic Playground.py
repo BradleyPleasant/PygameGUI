@@ -1,23 +1,25 @@
-from DynamicUI import *
-from DynamicUI.Objects.Draggable import DraggableInputHandler
-from DynamicUI.Objects.Label import LabelRenderer, LabelInputHandler
-from DynamicUI.Objects.Button import ButtonInputHandler
+from V02 import *
+from V02.Objects.Draggable import DraggableInputHandler
+from V02.Objects.Label import LabelRenderer, LabelInputHandler
+from V02.Objects.Button import ButtonInputHandler
+from V02.Objects.Resizable import ResizableInputHandler
+from V02.Layout import VerticalLayout
 
 
 app = Application()
 
 
 root = Element(
-    organizer=VerticalOrganizer(element_padding=10, children_padding=5),
+    organizer=VerticalOrganizer(element_padding=5, children_padding=5),
     renderer=Renderer(background_color=(70, 70, 200)),
-    input_handler=DraggableInputHandler(),
+    input_handler=None,
     rect=(20, 20, 0, 0)
 )
 
 child1 = Element(
     organizer=VerticalOrganizer(element_padding=5, children_padding=5),
     renderer=LabelRenderer(text = "This is a child element inside the root element"),
-    input_handler=None,
+    input_handler=ResizableInputHandler(),
     parent=root,
     rect=(0, 0, 0, 0)
 )
@@ -31,7 +33,7 @@ child2 = Element(
 child3 = Element(
     organizer=HorizontalOrganizer(element_padding=5, children_padding=5),
     renderer=Renderer(background_color=(20, 20, 200)),
-    input_handler=None,
+    input_handler=ResizableInputHandler(),
     parent=root,
     rect=(0, 0, 0, 0)
 ); child4 = Element(

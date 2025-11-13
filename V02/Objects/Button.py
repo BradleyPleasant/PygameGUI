@@ -8,3 +8,6 @@ class ButtonInputHandler(InputHandler):
             print("Button pressed!")
         elif event.type == MOUSEBUTTONUP:
             print("Button released!")
+            if element.global_rect().collidepoint(event.pos):
+                print("Button clicked!")
+            element.app.selected = None

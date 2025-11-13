@@ -45,3 +45,9 @@ class Renderer:
             rect.midright = (element.rect.width, element.rect.height // 2)
         return rect
 
+    def invalidate(self, element: Element) -> None:
+        """Invalidate cached surface."""
+        self.surface = None
+        if element.parent:
+            element.parent.renderer.invalidate(element.parent)
+

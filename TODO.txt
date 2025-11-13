@@ -18,3 +18,8 @@ Objects:
 [ ] - Text Box (multi-line Label)
 [ ] - Combo Box
 [ ] - Draggable
+
+
+Notes:
+
+- Implement New Upwards and Downwards pass techniques for Organizers to better manage child element sizing and positioning.

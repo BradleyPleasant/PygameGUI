@@ -50,7 +50,7 @@ class VerticalOrganizer(Organizer):
             child.rect.topleft = (x, y)
             child.rect.size = (w, h)
             y += h + self.children_padding
-            child.organizer.organize(child)
+            child.organizer.measure(child)
 
 
 class HorizontalOrganizer(Organizer):
@@ -94,4 +94,4 @@ class HorizontalOrganizer(Organizer):
             child.rect.topleft = (x, y)
             child.rect.size = (w, h)
             x += w + self.children_padding
-            child.organizer.organize(child)
+            child.organizer.measure(child)
