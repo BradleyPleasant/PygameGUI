@@ -5,8 +5,6 @@ from .Graphics import Graphics
 from .Input import Input
 import pygame
 
-from .Objects.Label import Label
-
 
 class Application:
     def __init__(self, size: tuple[int, int] = (800, 600)):
@@ -36,10 +34,13 @@ class Application:
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if self.selected:
                         self.selected.input.on_mouse_button_up(self.selected, event)
+                    else:
+                        if lowest := self.get_lowest_selectable_child(event.pos):
+                            lowest.input.on_mouse_button_up(lowest, event)
 
                 elif event.type == pygame.MOUSEMOTION:
                     if self.cursor_capture:
-                        self.cursor_capture.input.on_mouse_motion(self.selected, event)
+                        self.cursor_capture.input.on_mouse_motion(self.cursor_capture, event)
                     else:
                         if lowest := self.get_lowest_selectable_child(event.pos):
                             lowest.input.on_mouse_motion(lowest, event)

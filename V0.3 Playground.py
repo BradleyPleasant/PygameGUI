@@ -1,4 +1,6 @@
-from V03 import Application, Element, VerticalLayout, Graphics, Label, Input
+from V03 import Application, Element, VerticalLayout, Graphics, Input
+from V03.Objects.Label import Label
+from V03.Objects.ReSizable import ReSizable
 
 
 app = Application()
@@ -8,6 +10,7 @@ root = Element(
     parent = None,
     layout = VerticalLayout(5, 2),
     graphics = Graphics(),
+    input = ReSizable()
 )
 root.size = (400, 300)
 

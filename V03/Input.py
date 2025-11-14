@@ -2,6 +2,8 @@ from pygame.locals import *
 
 
 class Input:
+    def __init__(self, selectable: bool = True):
+        self.selectable = selectable
     def on_mouse_button_down(self, element, event):
         print(f"Event: {event}, Element: {element}")
     def on_mouse_button_up(self, element, event):
