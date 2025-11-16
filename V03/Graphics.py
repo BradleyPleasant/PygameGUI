@@ -40,3 +40,10 @@ class Graphics:
 
         return self.surface
 
+    def invalidate(self, element: Element) -> Element:
+        element.graphics.surface = None
+        if element.parent:
+            if element.parent.graphics:
+                element.parent.graphics.invalidate(element.parent)
+        return element
+

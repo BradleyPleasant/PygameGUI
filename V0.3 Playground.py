@@ -21,5 +21,12 @@ root_child_1 = Element(
     input=Input()
 )
 
+root_child_2 = Element(
+    parent = root,
+    layout = VerticalLayout(5, 2),
+    graphics = Label("this is a test", None, 22),
+    input=ReSizable()
+)
+
 app.elements.append(root)
 app.run()

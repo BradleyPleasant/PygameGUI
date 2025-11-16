@@ -34,6 +34,8 @@ class Application:
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if self.selected:
                         self.selected.input.on_mouse_button_up(self.selected, event)
+                    elif self.cursor_capture:
+                        self.cursor_capture.input.on_mouse_button_up(self.cursor_capture, event)
                     else:
                         if lowest := self.get_lowest_selectable_child(event.pos):
                             lowest.input.on_mouse_button_up(lowest, event)
