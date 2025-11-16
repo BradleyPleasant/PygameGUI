@@ -1,52 +1,76 @@
-# Layout Class Defines Behaviour to scale and position the children of the element
-# It does this via the Upwards Pass on all children that will "measure" and cache
-# their minimum size.
-# It then does a downwards pass from parent to child that will "arrange" all the children
-# by looking at how much space we can offer the children and the setting their positions
-# and sizes.
-from V03 import Element, Graphics
+from .Element import Element
 
 
+# python
 class VerticalLayout:
     def __init__(self, element_padding: int = 5, child_padding: int = 2):
         self.element_padding = element_padding
         self.child_padding = child_padding
 
     def measure(self, element: Element) -> tuple[int, int]:
-        # if the element doesn't have children we have reached the bottom of the tree and should return our own size
+        # leaf element: measure from graphics if present
         if not element.children:
-            # return the size of the element
             if element.graphics:
-                size = element.graphics.draw(element).get_size() # TODO: Do we need to return rect size if it's bigger?
-                # cache the size
-                element.min_size = size
-                return size
-            # if no Graphics then just return the padding * 2
-            return self.element_padding * 2, self.child_padding * 2
-        # if the element does have children we must work out our minimum size as if all the children were arranged
-        x = 0
+                size = element.graphics.draw(element).get_size()
+                # ensure ints
+                element.min_size = (int(size[0]), int(size[1]))
+                return element.min_size
+            # empty element minimal size = paddings
+            element.min_size = (self.element_padding * 2, self.element_padding * 2)
+            return element.min_size
+
+        max_w = 0
         y = self.element_padding
         for child in element.children:
-            if not child.layout: size = self.measure(child)
-            else: size = child.layout.measure(child)
-            x = max(size[0], x) # use the maximum size
+            size = child.layout.measure(child) if child.layout else self.measure(child)
+            max_w = max(max_w, size[0])
             y += size[1] + self.child_padding
-        # we don't need to check if we have children or not as the guard clause handles that case
-        y -= self.child_padding # we need to account for the trailing padding from the for loop
-        return x + self.element_padding * 2, y + self.element_padding # calculate for our padding
+        y -= self.child_padding
+        measured = (max_w + self.element_padding * 2, y + self.element_padding)
+        # store integer sizes
+        element.min_size = (int(measured[0]), int(measured[1]))
+        return element.min_size
 
     def arrange(self, element: Element) -> tuple[int, int]:
-        # if the element is too small increases it's size to the minimum height.
-        if element.width < element.min_size[0]: element.width = element.min_size[0]
-        if element.height < element.min_size[1]: element.height = element.min_size[1]
-        # start from the parent and arrange children vertically. Also expand them to fill their parent's width
+        # ensure element meets its measured minimum
+        if hasattr(element, 'min_size'):
+            if element.width < element.min_size[0]:
+                element.width = element.min_size[0]
+            if element.height < element.min_size[1]:
+                element.height = element.min_size[1]
+
+        # position children using local coordinates (child.x, child.y)
         y = self.element_padding
         for child in element.children:
-            # set the position of the element to the correct place relative to the element
-            child.topleft = (self.element_padding, y)
-            y +=  child.height + self.child_padding
-            if child.layout: child.layout.arrange(child) # Perform the parent to child arrange pass by arranging children
+            # ensure child meets its measured minimum
+            if hasattr(child, 'min_size'):
+                if child.width < child.min_size[0]:
+                    child.width = child.min_size[0]
+                if child.height < child.min_size[1]:
+                    child.height = child.min_size[1]
 
+            # place child relative to parent (local coords)
+            child.x = self.element_padding
+            child.y = y
 
+            # make sure child's size tuple is synced and integral
+            try:
+                child.size = (int(child.width), int(child.height))
+            except Exception:
+                child.size = (int(getattr(child, 'width', 0)), int(getattr(child, 'height', 0)))
 
+            # recurse: use child's own layout if present, otherwise fall back
+            if child.layout:
+                child.layout.arrange(child)
+            elif child.children:
+                self.arrange(child)
 
+            y += child.height + self.child_padding
+
+        # ensure element.size is synced too
+        try:
+            element.size = (int(element.width), int(element.height))
+        except Exception:
+            element.size = (int(getattr(element, 'width', 0)), int(getattr(element, 'height', 0)))
+
+        return int(element.width), int(element.height)

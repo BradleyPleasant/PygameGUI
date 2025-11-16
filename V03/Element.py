@@ -3,6 +3,13 @@ import pygame
 
 class Element(pygame.FRect):
     app = None
+    # explicit attribute annotations for static checkers
+    parent: "Element|None"
+    layout: object
+    graphics: object
+    input: object
+    children: list["Element"]
+    root: "Element|None"
 
     def __init__(self, parent: "Element|None" = None, layout = None, graphics = None, input = None):
         # use a Rect instance on the element rather than subclassing it
@@ -13,12 +20,14 @@ class Element(pygame.FRect):
         self.graphics = graphics
         self.input = input
         self.children: list[Element] = []
+        self.root = self
 
-        if self.parent:
+        if self.parent is not None:
             self.parent.children.append(self)
+            self.root = self.parent.root
 
     def global_position(self):
-        if self.parent:
+        if self.parent is not None:
             x, y = self.parent.global_position()
             return x + self.x, y + self.y
         return self.x, self.y
@@ -39,7 +48,6 @@ class Element(pygame.FRect):
     def get_lowest_selectable_parent(self) -> "Element | None":
         if self.input:
             return self
-        if self.parent:
+        if self.parent is not None:
             return self.parent.get_lowest_selectable_parent()
         return None
-
