@@ -16,6 +16,14 @@ class Application:
         self.cursor_capture = None
 
     def run(self):
+        # INITIAL LAYOUT PASS (fixes the “first frame wrong” issue)
+        for element in self.elements:
+            if element.layout:
+                element.min_size = element.layout.measure(element)
+
+        for element in self.elements:
+            if element.layout:
+                element.layout.arrange(element)
         while True:
             self.screen.fill((0, 0, 0))
             for event in pygame.event.get():
