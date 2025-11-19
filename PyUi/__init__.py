@@ -32,6 +32,9 @@ class Application:
             self.screen.fill((0, 0, 0))
 
             # reset the mouse cursor each frame
+            if not self.get_lowest_selectable_child(pygame.mouse.get_pos()):
+                pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()

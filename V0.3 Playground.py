@@ -1,8 +1,8 @@
-from V03 import Application, Element, VerticalLayout, Graphics, Input
-from V03.Objects.Label import Label
-from V03.Objects.ReSizable import ReSizable
-from V03.Objects.Draggable import Draggable
-from V03.Objects.TextField import TextField
+from PyUi import Application, Element, VerticalLayout, Graphics, Input
+from PyUi.Objects.Label import Label
+from PyUi.Objects.ReSizable import ReSizable
+from PyUi.Objects.Draggable import Draggable
+from PyUi.Objects.TextField import TextField
 
 
 app = Application()
@@ -15,7 +15,6 @@ root = Element(
     graphics = Graphics((40, 40, 40)),
     input = ReSizable()
 )
-#
 
 root_child_1 = Element(
     parent = root,
