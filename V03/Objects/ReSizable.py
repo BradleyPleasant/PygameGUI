@@ -49,7 +49,7 @@ class ReSizable(Input):
             # compute child bounds relative to element
             for child in element.children:
                 cx, cy = child.x, child.y
-                cw, ch = child.size
+                cw, ch = child.min_size
                 content_min_w = max(content_min_w, cx + cw)
                 content_min_h = max(content_min_h, cy + ch)
 
@@ -59,8 +59,8 @@ class ReSizable(Input):
             pad = element.layout.element_padding
 
         # enforce children bounds + padding
-        w = max(w, content_min_w + pad * 2)
-        h = max(h, content_min_h + pad * 2)
+        w = max(w, content_min_w + pad)
+        h = max(h, content_min_h + pad)
 
         # PARENT MAX AREA
         if element.parent:
@@ -71,8 +71,8 @@ class ReSizable(Input):
             if element.parent.layout:
                 parent_pad = element.parent.layout.element_padding
 
-            usable_w = pw - parent_pad * 2
-            usable_h = ph - parent_pad * 2
+            usable_w = pw - parent_pad
+            usable_h = ph - parent_pad
 
             max_w = usable_w - px
             max_h = usable_h - py

@@ -53,6 +53,9 @@ class VerticalLayout:
             child.x = self.element_padding
             child.y = y
 
+            # make sure the childs width fills the parent minus paddings
+            child.width = element.width - self.element_padding * 2
+
             # make sure child's size tuple is synced and integral
             try:
                 child.size = (int(child.width), int(child.height))
