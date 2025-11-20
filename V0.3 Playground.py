@@ -36,7 +36,7 @@ root_child_2_child_1 = Element(
 root_child_2_child_1_child_1 = Element(
     parent = root_child_2_child_1,
     graphics = Label("deeply nested element", None, 14, background_color=(200,200,200)),
-    input=TextField()
+    input=Input()
 )
 
 root_child_2_child_1_child_2 = Element(

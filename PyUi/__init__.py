@@ -15,18 +15,9 @@ class Application:
         self.selected = None
         self.cursor_capture = None
         # snapshot control: optionally write first rendered frame to a PNG
-        self._snapshot_done = False
+        self._last_element_hovered = None
 
     def run(self):
-        # INITIAL LAYOUT PASS (fixes the “first frame wrong” issue)
-        for element in self.elements:
-            if element.layout:
-                element.min_size = element.layout.measure(element)
-
-        for element in self.elements:
-            if element.layout:
-                element.layout.arrange(element)
-
         while True:
             self.screen.fill((0, 0, 0))
 
@@ -56,6 +47,15 @@ class Application:
                             lowest.input.on_mouse_button_up(lowest, event)
 
                 elif event.type == pygame.MOUSEMOTION:
+                    lowest = self.get_lowest_selectable_child(event.pos)
+                    if lowest != self._last_element_hovered:
+                        if self._last_element_hovered:
+                            self._last_element_hovered.input.on_mouse_leave(self._last_element_hovered)
+                        if lowest:
+                            lowest.input.on_mouse_enter(lowest)
+                        # reset cursor to arrow on enter/leave
+                        pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+                        self._last_element_hovered = lowest
                     if self.cursor_capture:
                         self.cursor_capture.input.on_mouse_motion(self.cursor_capture, event)
                     else:
