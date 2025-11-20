@@ -4,7 +4,6 @@ from .Layout import VerticalLayout
 from .Graphics import Graphics
 from .Input import Input
 import pygame
-import os
 
 
 class Application:
@@ -16,18 +15,9 @@ class Application:
         self.selected = None
         self.cursor_capture = None
         # snapshot control: optionally write first rendered frame to a PNG
-        self._snapshot_done = False
+        self._last_element_hovered = None
 
     def run(self):
-        # INITIAL LAYOUT PASS (fixes the “first frame wrong” issue)
-        for element in self.elements:
-            if element.layout:
-                element.min_size = element.layout.measure(element)
-
-        for element in self.elements:
-            if element.layout:
-                element.layout.arrange(element)
-
         while True:
             self.screen.fill((0, 0, 0))
 
@@ -42,7 +32,6 @@ class Application:
 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if lowest := self.get_lowest_selectable_child(event.pos):
-                        print(lowest)
                         if self.selected is lowest: self.selected = None
                         else: self.selected = lowest
                         lowest.input.on_mouse_button_down(lowest, event)
@@ -50,7 +39,7 @@ class Application:
 
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if self.selected:
-                        self.selected.input.on_mouse_button_up(self.selected, event)
+                        self.selected.input.on_mouse_button_up(self.selected, event) # diable type checker pycharm
                     elif self.cursor_capture:
                         self.cursor_capture.input.on_mouse_button_up(self.cursor_capture, event)
                     else:
@@ -58,6 +47,15 @@ class Application:
                             lowest.input.on_mouse_button_up(lowest, event)
 
                 elif event.type == pygame.MOUSEMOTION:
+                    lowest = self.get_lowest_selectable_child(event.pos)
+                    if lowest != self._last_element_hovered:
+                        if self._last_element_hovered:
+                            self._last_element_hovered.input.on_mouse_leave(self._last_element_hovered)
+                        if lowest:
+                            lowest.input.on_mouse_enter(lowest)
+                        # reset cursor to arrow on enter/leave
+                        pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+                        self._last_element_hovered = lowest
                     if self.cursor_capture:
                         self.cursor_capture.input.on_mouse_motion(self.cursor_capture, event)
                     else:
@@ -111,15 +109,10 @@ class Application:
             if lowest := element.get_lowest_element_at_pos(pos):
                 if lowest_selectable := lowest.get_lowest_selectable_parent():
                     return lowest_selectable
+        return None
 
     def invalidate_recursive(self, element: Element):
         if element.graphics:
-            try:
-                element.graphics.invalidate(element)
-            except Exception:
-                # fallback: clear attributes directly
-                element.graphics.surface = None
-                if hasattr(element.graphics, '_cached_for'):
-                    element.graphics._cached_for = None
+            element.graphics.invalidate(element)
         for child in element.children:
             self.invalidate_recursive(child)

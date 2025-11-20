@@ -7,7 +7,8 @@ class TextField(Input):
     def __init__(self):
         super().__init__(selectable=True)
         self.text = ""
-        self.allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?-_'\"@#$/\\()[]{}<>`~|+=*&^%$§€£¥¢°"
+        self.allowed_chars = ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
+                              ".,!?-_'\"@#$/\\()[]{}<>`~|+=*&^%§€£¥¢°")
 
 
     def on_text_input(self, element, event):

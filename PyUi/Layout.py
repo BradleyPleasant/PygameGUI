@@ -7,15 +7,13 @@ class VerticalLayout:
         self.element_padding = element_padding
         self.child_padding = child_padding
 
+    # In Layout.py - VerticalLayout.measure()
     def measure(self, element: Element) -> tuple[int, int]:
-        # leaf element: measure from graphics if present
         if not element.children:
             if element.graphics:
                 size = element.graphics.draw(element).get_size()
-                # ensure ints
                 element.min_size = (int(size[0]), int(size[1]))
                 return element.min_size
-            # empty element minimal size = paddings
             element.min_size = (self.element_padding * 2, self.element_padding * 2)
             return element.min_size
 
@@ -27,7 +25,8 @@ class VerticalLayout:
             y += size[1] + self.child_padding
         y -= self.child_padding
         measured = (max_w + self.element_padding * 2, y + self.element_padding)
-        # store integer sizes
+
+        # Store REAL minimum - don't look at width/height here
         element.min_size = (int(measured[0]), int(measured[1]))
         return element.min_size
 
@@ -56,7 +55,7 @@ class VerticalLayout:
             child.x = self.element_padding
             child.y = y
 
-            # make sure the childs width fills the parent minus paddings
+            # make sure the children width fills the parent minus paddings
             child.width = element.width - self.element_padding * 2
 
             if child.height > child.min_size[1] and extra_space < 0:

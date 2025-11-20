@@ -5,10 +5,11 @@ import pygame
 import random
 
 class Graphics:
-    def __init__(self, background_color = None):
+    def __init__(self, background_color = None, border_radius: int = 5):
         self.surface: Surface|None = None
         self._cached_for: Element|None = None
         self.background_color = background_color
+        self.border_radius = border_radius
 
     def draw(self, element: Element) -> Surface:
         # default draw returns a small transparent surface instead of an opaque black
@@ -50,7 +51,7 @@ class Graphics:
             if getattr(el, 'graphics', None):
                 bg = el.graphics.background_color
             if bg is not None:
-                surf.fill(bg)
+                pygame.draw.rect(surf, bg, (0, 0, el.w, el.h), border_radius=self.border_radius)
 
             # draw this element's own content
             if getattr(el, 'graphics', None):
@@ -69,10 +70,7 @@ class Graphics:
                             child.size = (int(child.min_size[0]), int(child.min_size[1]))
                         else:
                             child.size = (1, 1)
-                    # clear child's cached surface so we always re-render for current state
-                    child.graphics.surface = None
-                    if hasattr(child.graphics, '_cached_for'):
-                        child.graphics._cached_for = None
+
                     child_surf = child.graphics.render(child)
                 else:
                     # no graphics object on the child: compose a surface from its subtree
@@ -94,7 +92,6 @@ class Graphics:
         # clear this graphics' cache for the given element
         if getattr(self, 'surface', None):
             self.surface = None
-            self._cached_for = None
 
         # bubble invalidation up so parent caches are cleared too
         if element.parent:
