@@ -70,10 +70,7 @@ class Graphics:
                             child.size = (int(child.min_size[0]), int(child.min_size[1]))
                         else:
                             child.size = (1, 1)
-                    # clear child's cached surface so we always re-render for current state
-                    child.graphics.surface = None
-                    if hasattr(child.graphics, '_cached_for'):
-                        child.graphics._cached_for = None
+
                     child_surf = child.graphics.render(child)
                 else:
                     # no graphics object on the child: compose a surface from its subtree
@@ -95,7 +92,6 @@ class Graphics:
         # clear this graphics' cache for the given element
         if getattr(self, 'surface', None):
             self.surface = None
-            self._cached_for = None
 
         # bubble invalidation up so parent caches are cleared too
         if element.parent:

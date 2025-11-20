@@ -6,7 +6,7 @@ Core Functionality:
 [Done] - Optimize rendering pipeline for better performance.
 [ ] - Optimize layout calculations to only recalculate when necessary. HARD
 [Done] - Implement Vertical Layouts
-[ ] - Implement Horizontal Layouts
+[ ] - Implement Horizontal Layouts - Saving this for the last commit as it will require refactoring all of the core layout code
 [Basically Done] - resizing should have no bounds but instead be bounded by the layout measure and arrange passes
     [Done] - resizing parents smaller than children preferred size should cause children to shrink accordingly
     [Mostly Done] - Needs work to make it global not local - Resizing should adhere with min/max sizes based on its neighbors preferred and min sizes to prevent overflow
@@ -15,6 +15,8 @@ Core Functionality:
 [In Progress] - Add custom Events for common interactions (e.g., onHover, onFocus, onBlur).
 [Done] - Dabble with adding a input system for keyboard and mouse interactions.
 [ ] - Add a camera system to allow for panning and zooming of the UI.
+[ ] - rework the component and systems system to allow for better modularity and easier addition of new UI elements and features.
+[ ] - Implement accessibility features (e.g., keyboard navigation, screen reader support).
 
 Objects:
 [Needs work] - Label - added padding - add alignment options (left, center, right)

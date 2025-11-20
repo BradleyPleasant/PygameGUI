@@ -11,7 +11,8 @@ class Element(pygame.FRect):
     input: object
     children: list["Element"]
     root: "Element|None"
-    min_size: tuple[float, float] = (0, 0)
+    min_size: tuple[float, float] = (0, 0)     # Refactor into components TODO
+    desired_size: tuple[float, float] = (0, 0) # Refactor into components TODO
 
     def __init__(self, parent: "Element|None" = None, layout = None, graphics = None, input = None):
         # use a Rect instance on the element rather than subclassing it
@@ -23,6 +24,7 @@ class Element(pygame.FRect):
         self.input = input
         self.children: list[Element] = []
         self.root = self
+        self.components = dict()
 
         if self.parent is not None:
             self.parent.children.append(self)
