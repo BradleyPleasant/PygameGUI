@@ -31,58 +31,18 @@ class ReSizable(Input):
         if element.app.cursor_capture is not element:
             return
 
+        # Resize element based on mouse movement
+        element.width += event.rel[0]
+        element.height += event.rel[1]
 
-        # RESIZE
-        w, h = element.size
-        w += event.rel[0]
-        h += event.rel[1]
-
-        # MIN SIZE
-        w = max(w, element.min_size[0])
-        h = max(h, element.min_size[1])
-
-        # MIN CONTENT SIZE
-        content_min_w = 0
-        content_min_h = 0
-
-        if element.children:
-            # compute child bounds relative to element
-            for child in element.children:
-                cx, cy = child.x, child.y
-                cw, ch = child.min_size
-                content_min_w = max(content_min_w, cx + cw)
-                content_min_h = max(content_min_h, cy + ch)
-
-        # padding from element layout
-        pad = 0
-        if element.layout:
-            pad = element.layout.element_padding
-
-        # enforce children bounds + padding
-        w = max(w, content_min_w + pad)
-        h = max(h, content_min_h + pad)
-
-        # PARENT MAX AREA
-        if element.parent:
-            pw, ph = element.parent.size
-            px, py = element.x, element.y
-
-            parent_pad = 0
-            if element.parent.layout:
-                parent_pad = element.parent.layout.element_padding
-
-            usable_w = pw - parent_pad
-            usable_h = ph - parent_pad
-
-            max_w = usable_w - px
-            max_h = usable_h - py
-
-            w = min(w, max_w)
-            h = min(h, max_h)
-
-        # apply
-        element.size = (w, h)
-
-        # redraw
-        if element.graphics:
-            element.graphics.invalidate(element)
+        # if resizing makes the element or it's siblings stretch beyond parent's bounds, adjust parent size too
+        parent = element.parent
+        if parent:
+            total_width = max(sibling.width for sibling in parent.children)
+            total_height = (sum(sibling.height for sibling in parent.children)
+                            + (parent.layout.child_padding * (len(parent.children) - 1))
+                            + (parent.layout.element_padding * 2))
+            if parent.width < total_width:
+                parent.width = total_width
+            if parent.height < total_height:
+                parent.height = total_height

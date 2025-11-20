@@ -39,6 +39,9 @@ class VerticalLayout:
             if element.height < element.min_size[1]:
                 element.height = element.min_size[1]
 
+        total_height = sum(child.height for child in element.children)
+        extra_space = element.height - total_height - (self.child_padding * (len(element.children) - 1)) - (self.element_padding * 2)
+
         # position children using local coordinates (child.x, child.y)
         y = self.element_padding
         for child in element.children:
@@ -55,6 +58,12 @@ class VerticalLayout:
 
             # make sure the childs width fills the parent minus paddings
             child.width = element.width - self.element_padding * 2
+
+            if child.height > child.min_size[1] and extra_space < 0:
+                # reduce child's height proportionally if there's not enough space
+                reduction = min(child.height - child.min_size[1], -extra_space)
+                child.height -= reduction
+                extra_space += reduction
 
             # make sure child's size tuple is synced and integral
             try:

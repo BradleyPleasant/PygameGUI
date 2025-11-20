@@ -5,7 +5,7 @@ from pygame import Surface
 
 
 class Label(Graphics):
-    def __init__(self, text: str, font_name: str|None = None, font_size: int = 22, background_color = None, padding: int = 3):
+    def __init__(self, text: str, font_name: str|None = None, font_size: int = 22, background_color = None, padding: int = 5):
         super().__init__(background_color)
         self.text = text
         self._font_name = font_name
