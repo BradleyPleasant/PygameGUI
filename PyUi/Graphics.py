@@ -5,10 +5,11 @@ import pygame
 import random
 
 class Graphics:
-    def __init__(self, background_color = None):
+    def __init__(self, background_color = None, border_radius: int = 5):
         self.surface: Surface|None = None
         self._cached_for: Element|None = None
         self.background_color = background_color
+        self.border_radius = border_radius
 
     def draw(self, element: Element) -> Surface:
         # default draw returns a small transparent surface instead of an opaque black
@@ -50,7 +51,7 @@ class Graphics:
             if getattr(el, 'graphics', None):
                 bg = el.graphics.background_color
             if bg is not None:
-                surf.fill(bg)
+                pygame.draw.rect(surf, bg, (0, 0, el.w, el.h), border_radius=self.border_radius)
 
             # draw this element's own content
             if getattr(el, 'graphics', None):

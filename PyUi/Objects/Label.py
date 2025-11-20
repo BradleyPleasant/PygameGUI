@@ -20,7 +20,5 @@ class Label(Graphics):
         surf = self.font.render(self.text, True, self.color)
         # add padding around the text
         padded_surf = Surface((surf.get_width() + 2 * 5, surf.get_height() + 2 * 5), pygame.SRCALPHA)
-        if self.background_color is not None:
-            padded_surf.fill(self.background_color)
         padded_surf.blit(surf, (5, 5))
         return padded_surf

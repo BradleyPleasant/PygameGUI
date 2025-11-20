@@ -40,8 +40,8 @@ class ReSizable(Input):
         if parent:
             total_width = max(sibling.width for sibling in parent.children)
             total_height = (sum(sibling.height for sibling in parent.children)
-                            + (parent.layout.child_padding * (len(parent.children) - 1))
-                            + (parent.layout.element_padding * 2))
+                            + (parent.child_padding() * (len(parent.children) - 1))
+                            + (parent.element_padding() * 2))
             if parent.width < total_width:
                 parent.width = total_width
             if parent.height < total_height:

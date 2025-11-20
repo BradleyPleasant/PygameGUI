@@ -1,6 +1,7 @@
 # Element.py
 import pygame
 
+
 class Element(pygame.FRect):
     app = None
     # explicit attribute annotations for static checkers
@@ -10,6 +11,7 @@ class Element(pygame.FRect):
     input: object
     children: list["Element"]
     root: "Element|None"
+    min_size: tuple[float, float] = (0, 0)
 
     def __init__(self, parent: "Element|None" = None, layout = None, graphics = None, input = None):
         # use a Rect instance on the element rather than subclassing it
@@ -44,10 +46,23 @@ class Element(pygame.FRect):
                 return result
         return self
 
-
     def get_lowest_selectable_parent(self) -> "Element | None":
-        if self.input:
+        if self.input and self.input.selectable:
             return self
         if self.parent is not None:
             return self.parent.get_lowest_selectable_parent()
         return None
+
+    def element_padding(self) -> int:
+        if self.layout and hasattr(self.layout, 'element_padding'):
+            return self.layout.element_padding
+        if self.parent:
+            return self.parent.element_padding()
+        return 0
+
+    def child_padding(self) -> int:
+        if self.layout and hasattr(self.layout, 'child_padding'):
+            return self.layout.child_padding
+        if self.parent:
+            return self.parent.child_padding()
+        return 0

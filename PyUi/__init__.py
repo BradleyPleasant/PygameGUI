@@ -4,7 +4,6 @@ from .Layout import VerticalLayout
 from .Graphics import Graphics
 from .Input import Input
 import pygame
-import os
 
 
 class Application:
@@ -42,7 +41,6 @@ class Application:
 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if lowest := self.get_lowest_selectable_child(event.pos):
-                        print(lowest)
                         if self.selected is lowest: self.selected = None
                         else: self.selected = lowest
                         lowest.input.on_mouse_button_down(lowest, event)
@@ -50,7 +48,7 @@ class Application:
 
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if self.selected:
-                        self.selected.input.on_mouse_button_up(self.selected, event)
+                        self.selected.input.on_mouse_button_up(self.selected, event) # diable type checker pycharm
                     elif self.cursor_capture:
                         self.cursor_capture.input.on_mouse_button_up(self.cursor_capture, event)
                     else:
@@ -111,15 +109,10 @@ class Application:
             if lowest := element.get_lowest_element_at_pos(pos):
                 if lowest_selectable := lowest.get_lowest_selectable_parent():
                     return lowest_selectable
+        return None
 
     def invalidate_recursive(self, element: Element):
         if element.graphics:
-            try:
-                element.graphics.invalidate(element)
-            except Exception:
-                # fallback: clear attributes directly
-                element.graphics.surface = None
-                if hasattr(element.graphics, '_cached_for'):
-                    element.graphics._cached_for = None
+            element.graphics.invalidate(element)
         for child in element.children:
             self.invalidate_recursive(child)
